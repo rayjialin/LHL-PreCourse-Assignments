@@ -18,15 +18,13 @@ int main(int argc, const char * argv[]) {
         BOOL playAgainBool = YES;
         char inputNumber[256];
         
-        //        char play[255];
-        
         while (playAgainBool == YES) {
             printf("Input a string: ");
             // limit input to max 255 characters
             fgets(inputChars, 255, stdin);
             
             // print as a c string
-            printf("Your string is: %s\nFollowing actions can be performed to manipulate the string: \n\t1.Uppercase \n\t2.Lowercase\n\t3.Numberize\n\t4.Canadianize\n\t5.Respond\n\t6.De-Space-It", inputChars);
+            printf("Your string is: %s\nFollowing actions can be performed to manipulate the string: \n\t1.Uppercase \n\t2.Lowercase\n\t3.Numberize\n\t4.Canadianize\n\t5.Respond\n\t6.De-Space-It\n\t7.Letter Count\n\t8.Remove Punctuaction\n\t9.Replace letters with emoji", inputChars);
             
             printf("\n\n\tPick your action: ");
             fgets(inputNumber, 256, stdin);
@@ -34,31 +32,26 @@ int main(int argc, const char * argv[]) {
             
             // convert char array to an NSString object
             NSString *inputString = [NSString stringWithUTF8String:inputChars];
-//            [inputString dataUsingEncoding:NSUTF16StringEncoding]
             NSString *inputNum = [NSString stringWithUTF8String:inputNumber];
             
-            //            if (inputNumber == '1') {
-            //                NSLog(@"%@", [inputString uppercaseString]);
-            //            }
-            
             switch ([inputNum integerValue]) {
-                case 1:
+                case 1:  // Convert to upperCase
                     NSLog(@"\n%@", [inputString uppercaseString]);
                     break;
-                case 2:
+                case 2: // Convert to lowerCase
                     NSLog(@"\n%@", [inputString lowercaseString]);
                     break;
-                case 3:
+                case 3: // Convert string to integer, otherwise raise message
                     if ([inputString integerValue] == 0){
                         NSLog(@"\nThe conversion was not successful.  %@ is not an integer.", [inputString substringToIndex:[inputString length] - 3]);
                     }else {
                         NSLog(@"\nThe conversion was successful, the converted integer is: %li", [inputString integerValue]);
                     }
                     break;
-                case 4:
+                case 4: // Convert string to append ", eh?" at the end
                     NSLog(@"\n%@, eh?", [inputString substringToIndex:[inputString length] - 3]);
                     break;
-                case 5:
+                case 5: // Respond to question mark and exclaimation mark with messages
                     if ([inputString characterAtIndex:[inputString length] - 2] == '?'){
                         NSLog(@"\nI dont't know");
                     }else if ([inputString characterAtIndex:[inputString length] - 2] == '!') {
@@ -67,14 +60,32 @@ int main(int argc, const char * argv[]) {
                         NSLog(@"\n%@", inputString);
                     }
                     break;
-                case 6:
+                case 6: // Replace whitespace in string with '-'
                     NSLog(@"\nString replaced the whitespace with '-': %@", [inputString stringByReplacingOccurrencesOfString:@" " withString:@"-"]);
-//                    NSLog(@"@", [inputString ])
                     break;
+                case 7: // Counting letters in string
+                    NSLog(@"\nThe input string has %li letters.", [inputString length]);
+                    break;
+                case 8: {
+                    // Remove all punctuation from the string
+                    NSMutableString *finalString = [[NSMutableString alloc] init];
+                    for (int i = 0; i < [inputString length] - 2; i++){
+                        NSString* string = [NSString stringWithFormat:@"%c" , [inputString characterAtIndex:i]];
+                        if ([@"!?.," containsString:string]){
+                            // do nothing
+                        }else {
+                            [finalString appendString:string];
+                        }
+                    }
+                    NSLog(@"%@", finalString);
+                    break;
+                }
+                case 9:
+                    
                 default:
                     break;
                 }
-                                  }
-                                  }
-                                  return 0;
-                                  }
+            }
+        }
+        return 0;
+}
